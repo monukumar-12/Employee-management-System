@@ -11,6 +11,7 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,10 +25,11 @@ public class EmployeeService {
         this.employeeRepo = employeeRepo;
     }
 
-    public EmployeeDto getEmployeeById(Long id) {
- EmployeeEntity employeeEntity= employeeRepo.findById(id).orElse(null);
-
-        return modelMapper.map(employeeEntity,EmployeeDto.class);
+    public Optional<EmployeeDto> getEmployeeById(Long id) {
+// EmployeeEntity employeeEntity= employeeRepo.findById(id);
+//
+//        return  employeeEntity.map(employeeEntity -> modelMapper.map(employeeEntity1,EmployeeDto.class));
+  return employeeRepo.findById(id).map(employeeEntity -> modelMapper.map(employeeEntity,EmployeeDto.class));
     }
 
     public List<EmployeeDto> getAlltheEmploye() {
@@ -75,7 +77,7 @@ public class EmployeeService {
 //        return modelMapper.map(employeeRepo.save(employeeEntity),EmployeeDto.class);
 //
 //    }
-public EmployeeDto UpdatePartialEmployeeTd(long employeeId, Map<String, Object> updates) {
+public EmployeeDto updatePartialEmployeeTd(long employeeId, Map<String, Object> updates) {
     boolean exists = isExistByEmployeeTd(employeeId);
     if (!exists) return null;
 
@@ -94,6 +96,8 @@ public EmployeeDto UpdatePartialEmployeeTd(long employeeId, Map<String, Object> 
     public boolean isExistByEmployeeTd(Long employeeId){
         return employeeRepo.existsById(employeeId);
     }
+
+
 }
 
 

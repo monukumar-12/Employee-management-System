@@ -4,6 +4,7 @@ package com.module2.layersMVC.Controller;
 import com.module2.layersMVC.dto.EmployeeDto;
 
 import com.module2.layersMVC.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -35,10 +37,11 @@ public class EmployeeController {
      // if(employeeDto== null) return ResponseEntity.notFound().build();
   return employeeDto.map
           (employeeDto1 -> ResponseEntity.ok(employeeDto1))
-          .orElse(ResponseEntity.notFound().build());
+          .orElseThrow(()-> new RuntimeException("employee not found with id :"+ id));
     // return ResponseEntity.ok(employeeDto);
         // return new EmployeeDto(id,"Monu","monu@gmail.com",20,LocalDate.of(2023,8,21 ),true);
     }
+
 
     @GetMapping
  //   public String
@@ -55,7 +58,7 @@ public class EmployeeController {
 //
 //    }
 
-    public  ResponseEntity<EmployeeDto> createNewEmployee(@RequestBody EmployeeDto inputEmployee){
+    public  ResponseEntity<EmployeeDto> createNewEmployee(@RequestBody @Valid EmployeeDto inputEmployee){
         EmployeeDto savedEmployee = employeeService.createNewEmployee(inputEmployee);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }

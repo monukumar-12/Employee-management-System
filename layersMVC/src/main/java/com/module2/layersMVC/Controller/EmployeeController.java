@@ -28,14 +28,12 @@ public class EmployeeController {
 
 
     @GetMapping(path= "/{employeeId}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable(name ="employeeId" ) Long id){
-     Optional< EmployeeDto> employeeDto= employeeService.getEmployeeById(id);
-     // if(employeeDto== null) return ResponseEntity.notFound().build();
-  return employeeDto.map
-          (employeeDto1 -> ResponseEntity.ok(employeeDto1))
-          .orElseThrow(()-> new RuntimeException("employee not found with id :"+ id));
-
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long employeeId){
+        EmployeeDto employeeDto = employeeService.getEmployeeById(employeeId)
+                .orElseThrow(() -> new RuntimeException("employee not found with id :" + employeeId));
+        return ResponseEntity.ok(employeeDto);
     }
+
 
 
     @GetMapping
